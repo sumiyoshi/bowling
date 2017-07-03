@@ -1,6 +1,6 @@
 <?php
 
-namespace Bowling\Frame;
+namespace Bowling\Game\Frame;
 
 interface FrameInterface
 {

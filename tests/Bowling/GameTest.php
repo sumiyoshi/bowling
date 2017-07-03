@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use Bowling\Game;
-use Bowling\Frame\Frame;
+use Bowling\Game\Frame\Frame;
 
 class GameTest extends TestCase
 {

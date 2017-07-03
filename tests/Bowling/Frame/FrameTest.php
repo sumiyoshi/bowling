@@ -1,7 +1,7 @@
 <?php
 
-use Bowling\Frame\Frame;
-use Bowling\Frame\FrameInterface;
+use Bowling\Game\Frame\Frame;
+use Bowling\Game\Frame\FrameInterface;
 use PHPUnit\Framework\TestCase;
 
 class FrameTest extends TestCase

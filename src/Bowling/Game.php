@@ -2,9 +2,9 @@
 
 namespace Bowling;
 
-use Bowling\Frame\Bonus\Bonus;
-use Bowling\Frame\Bonus\BonusInterface;
-use Bowling\Frame\FrameInterface;
+use Bowling\Game\Frame\Bonus\BonusFrameStack;
+use Bowling\Game\Frame\Bonus\BonusFrameStackInterface;
+use Bowling\Game\Frame\FrameInterface;
 
 class Game
 {
@@ -29,7 +29,7 @@ class Game
     private $frameNumber = 0;
 
     /**
-     * @var BonusInterface[]
+     * @var BonusFrameStackInterface[]
      */
     private $bonusStack = [];
 
@@ -39,6 +39,8 @@ class Game
         $this->frames = $frameClass::factories($pitchCount);
 
         $this->gameFrames = $this->frames;
+
+        $this->bonusStack = new BonusFrameStack;
     }
 
     public function setScore(int $first, int $second)
@@ -46,8 +48,7 @@ class Game
         $frame = $this->current();
         $frame->setPoint($first, $second);
 
-        $this->addBonusPoint($frame)
-            ->addBonusList($frame);
+        $this->bonusStack->bonusLogic($frame);
 
         if ($this->isLastFrame()) {
             $this->addBonusGame($frame);
@@ -80,45 +81,6 @@ class Game
         $pitchCount = ($frame->isStrike()) ? 2 : 1;
 
         $this->gameFrames = array_merge($this->gameFrames, $frameClass::factories($pitchCount));
-
-        return $this;
-    }
-
-    private function addBonusPoint(FrameInterface $frame) : self
-    {
-        if (
-            !$this->bonusStack ||
-            (!$frame->isFullMark())
-
-        ) {
-            return $this;
-        }
-
-        foreach ($this->bonusStack as $key => $bonus) {
-            $bonusFrame = $bonus->getFrame();
-            $bonusFrame->addBonus($frame->getAddPoint());
-
-            if ($bonus->isDie()) {
-                unset($this->bonusStack[$key]);
-            }
-        }
-
-        return $this;
-    }
-
-    private function addBonusList(FrameInterface $frame) : self
-    {
-        if ($frame->isStrike()) {
-            $this->bonusStack[] = new Bonus(2, $frame);
-
-            return $this;
-        }
-
-        if ($frame->isSpare()) {
-            $this->bonusStack[] = new Bonus(1, $frame);
-
-            return $this;
-        }
 
         return $this;
     }
