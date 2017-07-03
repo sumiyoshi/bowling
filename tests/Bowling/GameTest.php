@@ -1,6 +1,5 @@
 <?php
 
-use Bowling\Frame\BonusStrikeFrame;
 use PHPUnit\Framework\TestCase;
 use Bowling\Game;
 use Bowling\Frame\NormalFrame;
