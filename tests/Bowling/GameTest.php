@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use Bowling\Game;
-use Bowling\Frame\NormalFrame;
+use Bowling\Frame\Frame;
 
 class GameTest extends TestCase
 {
@@ -53,7 +53,7 @@ class GameTest extends TestCase
     private function newGame()
     {
         return new Game(
-            new NormalFrame,
+            new Frame,
             10
         );
     }

@@ -1,11 +1,10 @@
 <?php
 
-namespace Bowling\Frame;
-
-use Bowling\FrameInterface;
+use Bowling\Frame\Frame;
+use Bowling\Frame\FrameInterface;
 use PHPUnit\Framework\TestCase;
 
-class NormalFrameTest extends TestCase
+class FrameTest extends TestCase
 {
 
     public function test_点数保存()
@@ -129,17 +128,17 @@ class NormalFrameTest extends TestCase
 
     public function test_ファクトリー()
     {
-        $frames = NormalFrame::factories(10);
+        $frames = Frame::factories(10);
         $this->assertEquals(count($frames), 10);
 
         foreach ($frames as $frame) {
-            $this->assertEquals($frame instanceof NormalFrame, true);
+            $this->assertEquals($frame instanceof Frame, true);
         }
     }
 
     private function newFrame()
     {
-        return new NormalFrame();
+        return new Frame();
     }
 
 }

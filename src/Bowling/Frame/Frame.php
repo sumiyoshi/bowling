@@ -2,9 +2,7 @@
 
 namespace Bowling\Frame;
 
-use Bowling\FrameInterface;
-
-class NormalFrame implements FrameInterface
+class Frame implements FrameInterface
 {
 
     const POINT_LIMIT = 10;

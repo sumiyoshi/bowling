@@ -2,6 +2,10 @@
 
 namespace Bowling;
 
+use Bowling\Frame\Bonus\Bonus;
+use Bowling\Frame\Bonus\BonusInterface;
+use Bowling\Frame\FrameInterface;
+
 class Game
 {
     /**
@@ -25,7 +29,7 @@ class Game
     private $frameNumber = 0;
 
     /**
-     * @var Bonus[]
+     * @var BonusInterface[]
      */
     private $bonusStack = [];
 
