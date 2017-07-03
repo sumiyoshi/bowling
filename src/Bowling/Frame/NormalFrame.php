@@ -2,11 +2,9 @@
 
 namespace Bowling\Frame;
 
-use Bowling\Exception\PointOverException;
 use Bowling\FrameInterface;
-use Prophecy\Exception\Doubler\ReturnByReferenceException;
 
-class Normal implements FrameInterface
+class NormalFrame implements FrameInterface
 {
 
     const POINT_LIMIT = 10;
@@ -14,17 +12,17 @@ class Normal implements FrameInterface
     /**
      * @var int
      */
-    private $first;
+    protected $first;
 
     /**
      * @var int
      */
-    private $second;
+    protected $second;
 
     /**
      * @var int
      */
-    private $bonus;
+    protected $bonus;
 
     public function setPoint(int $first, int $second) : FrameInterface
     {
@@ -37,7 +35,7 @@ class Normal implements FrameInterface
     public function addBonus(int $point) : FrameInterface
     {
         if ($point > static::POINT_LIMIT) {
-            throw new PointOverException();
+            throw new \Exception('Point is an illegal value');
         }
 
         $this->bonus += $point;
@@ -65,19 +63,28 @@ class Normal implements FrameInterface
         return !$this->isStrike() && $this->getPoint() === 10;
     }
 
+    public function getAddPoint() : int
+    {
+        if (!$this->isStrike() && !$this->isSpare()) {
+            return 0;
+        }
+
+        return $this->isStrike() ? $this->getPoint() : $this->first;
+    }
+
     public static function factories(int $number) : array
     {
         return array_map(function () {
-            return new self;
+            return new static;
         }, range(0, $number - 1));
     }
 
-    private function calculationScore() : int
+    protected function calculationScore() : int
     {
         $point = $this->first + $this->second;
 
         if ($point > static::POINT_LIMIT) {
-            throw new PointOverException();
+            throw new \Exception('Point is an illegal value');
         }
 
         return $point;

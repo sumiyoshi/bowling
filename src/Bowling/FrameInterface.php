@@ -10,6 +10,8 @@ interface FrameInterface
 
     public function getPoint() : int;
 
+    public function getAddPoint() : int;
+
     public function getTotalPoint() : int;
 
     public function isStrike() : bool;
