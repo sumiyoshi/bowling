@@ -53,14 +53,19 @@ class NormalFrame implements FrameInterface
         return $this->getPoint() + $this->bonus;
     }
 
+    public function isFullMark() : bool
+    {
+        return $this->getPoint() === static::POINT_LIMIT;
+    }
+
     public function isStrike() : bool
     {
-        return $this->first === 10;
+        return $this->first === static::POINT_LIMIT;
     }
 
     public function isSpare() : bool
     {
-        return !$this->isStrike() && $this->getPoint() === 10;
+        return !$this->isStrike() && $this->getPoint() === static::POINT_LIMIT;
     }
 
     public function getAddPoint() : int

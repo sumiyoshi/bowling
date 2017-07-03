@@ -67,7 +67,7 @@ class Game
 
     private function addBonusGame(FrameInterface $frame) : self
     {
-        if (!$frame->isStrike() && !$frame->isSpare()) {
+        if (!$frame->isFullMark()) {
             return $this;
         }
 
@@ -84,7 +84,7 @@ class Game
     {
         if (
             !$this->bonusStack ||
-            (!$frame->isStrike() && !$frame->isSpare())
+            (!$frame->isFullMark())
 
         ) {
             return $this;

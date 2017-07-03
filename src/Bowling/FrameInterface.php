@@ -14,6 +14,8 @@ interface FrameInterface
 
     public function getTotalPoint() : int;
 
+    public function isFullMark() : bool;
+
     public function isStrike() : bool;
 
     public function isSpare() : bool;

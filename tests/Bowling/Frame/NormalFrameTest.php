@@ -68,6 +68,20 @@ class NormalFrameTest extends TestCase
         $this->assertEquals($frame->getTotalPoint(), 20);
     }
 
+    public function test_すべて倒したか()
+    {
+        $frame = $this->newFrame();
+
+        $frame->setPoint(1, 8);
+        $this->assertEquals($frame->isFullMark(), false);
+
+        $frame->setPoint(0, 10);
+        $this->assertEquals($frame->isFullMark(), true);
+
+        $frame->setPoint(10, 0);
+        $this->assertEquals($frame->isFullMark(), true);
+    }
+
     public function test_ストライクか()
     {
         $frame = $this->newFrame();
