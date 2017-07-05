@@ -33,8 +33,10 @@ class Game
      */
     private $bonusStack = [];
 
-    public function __construct(FrameInterface $frameClass, int $pitchCount)
+
+    public function __construct(string $frameClass, int $pitchCount)
     {
+        /** @var FrameInterface $frameClass */
         $this->frameClass = $frameClass;
         $this->frames = $frameClass::factories($pitchCount);
 

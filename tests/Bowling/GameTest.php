@@ -53,7 +53,7 @@ class GameTest extends TestCase
     private function newGame()
     {
         return new Game(
-            new Frame,
+            Frame::class,
             10
         );
     }

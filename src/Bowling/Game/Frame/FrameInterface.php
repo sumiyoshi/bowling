@@ -4,7 +4,7 @@ namespace Bowling\Game\Frame;
 
 interface FrameInterface
 {
-    public function setPoint(int $first, int $second) : FrameInterface;
+    public function setPoint(int $first, int $second, int $third = 0) : FrameInterface;
 
     public function addBonus(int $point) : FrameInterface;
 

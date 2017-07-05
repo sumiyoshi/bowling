@@ -22,7 +22,7 @@ class Frame implements FrameInterface
      */
     protected $bonus;
 
-    public function setPoint(int $first, int $second) : FrameInterface
+    public function setPoint(int $first, int $second, int $third = 0) : FrameInterface
     {
         $this->first = $first;
         $this->second = $second;
@@ -68,7 +68,7 @@ class Frame implements FrameInterface
 
     public function getAddPoint() : int
     {
-        if (!$this->isStrike() && !$this->isSpare()) {
+        if (!$this->isFullMark()) {
             return 0;
         }
 
