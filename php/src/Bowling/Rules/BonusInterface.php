@@ -4,7 +4,7 @@ namespace Bowling\Rules;
 
 interface BonusInterface
 {
-    public function getFrame() : FrameInterface;
+    public function addPoint(int $point) : BonusInterface;
 
     public function isDie() : bool;
 }

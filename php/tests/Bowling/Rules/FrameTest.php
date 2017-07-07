@@ -122,10 +122,16 @@ class FrameTest extends TestCase
         $this->assertEquals($frame->isSpare(), true);
     }
 
-    public function test_ファクトリー()
+    public function test_フレーム生成()
     {
-        $frame = Frame::factory();
-        $this->assertEquals($frame instanceof Frame, true);
+        $frame = $this->newFrame();
+        $this->assertEquals($frame->createFrame([1,2,3]) instanceof \Bowling\Rules\Frame, true);
+    }
+
+    public function test_ボーナス生成()
+    {
+        $frame = $this->newFrame();
+        $this->assertEquals($frame->createBonus() instanceof \Bowling\Rules\Bonus, true);
     }
 
     private function newFrame()

@@ -38,7 +38,6 @@ class Frame implements FrameInterface
             throw new \Exception('Point is an illegal value');
         }
 
-
         $this->first = $first;
         $this->second = $second;
         $this->third = $third;
@@ -71,7 +70,7 @@ class Frame implements FrameInterface
     {
         return $this->third;
     }
-    
+
     public function getPoint() : int
     {
         return $this->first + $this->second + $this->third;
@@ -84,7 +83,7 @@ class Frame implements FrameInterface
 
     public function isFullMark() : bool
     {
-        return $this->getPoint() === static::POINT_LIMIT;
+        return ($this->isStrike() || $this->isSpare());
     }
 
     public function isStrike() : bool
@@ -94,12 +93,24 @@ class Frame implements FrameInterface
 
     public function isSpare() : bool
     {
-        return !$this->isStrike() && $this->getPoint() === static::POINT_LIMIT;
+        return !$this->isStrike() && ($this->first + $this->second) === static::POINT_LIMIT;
     }
 
-    public static function factory() : FrameInterface
+    public function createFrame(array $score) : FrameInterface
     {
-        return new static;
+        $first = $score[0] ?? 0;
+        $second = $score[1] ?? 0;
+        $third = $score[2] ?? 0;
+
+        $frame = new self;
+        $frame->setPoint($first, $second, $third);
+
+        return $frame;
     }
 
+    public function createBonus() : BonusInterface
+    {
+        $life = ($this->isStrike()) ? 2 : 1;
+        return new Bonus($life, $this);
+    }
 }

@@ -20,10 +20,19 @@ class Bonus implements BonusInterface
         $this->frame = $frame;
     }
 
-    public function getFrame() : FrameInterface
+    public function addPoint(int $point) : BonusInterface
     {
+        if (
+            $point === 0 ||
+            $this->isDie()
+        ) {
+            return $this;
+        }
+
+        $this->frame->addBonus($point);
         $this->life--;
-        return $this->frame;
+        
+        return $this;
     }
 
     public function isDie() : bool

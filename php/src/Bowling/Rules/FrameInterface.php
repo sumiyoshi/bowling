@@ -24,5 +24,7 @@ interface FrameInterface
 
     public function isSpare() : bool;
 
-    public static function factory() : FrameInterface;
+    public function createBonus() : BonusInterface;
+
+    public function createFrame(array $score) : FrameInterface;
 }

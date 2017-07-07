@@ -2,8 +2,7 @@
 
 namespace Bowling;
 
-
-use Bowling\Rules\Bonus;
+use Bowling\Rules\BonusInterface;
 use Bowling\Rules\FrameInterface;
 
 class Game
@@ -16,22 +15,17 @@ class Game
     /**
      * @var FrameInterface[]
      */
-    private $frameStack;
+    private $frameStack = [];
 
     /**
-     * @var FrameInterface[]
+     * @var BonusInterface[]
      */
-    private $bonusFrameStack;
+    private $bonusFrameStack = [];
 
-    public function __construct(FrameInterface $frameClass)
+    public function __construct(array $data, FrameInterface $frame)
     {
-        /** @var FrameInterface $frameClass */
-        $this->frame = $frameClass;
-//        $this->frames = $frameClass::factories($pitchCount);
-//
-//        $this->gameFrames = $this->frames;
-//
-//        $this->bonusStack = new BonusFrameStack;
+        $this->frame = $frame;
+        $this->createFrameStack($data);
     }
 
     public function getScore() : int
@@ -42,97 +36,53 @@ class Game
         }, 0);
     }
 
+    public function addBonusPoint(FrameInterface $frame) : void
+    {
+        $this->bonusFrameStack = array_map(function ($bonus) use ($frame) {
+            /** @var BonusInterface $bonus */
+            $bonus
+                ->addPoint($frame->getFirstPoint())
+                ->addPoint($frame->getSecondPoint());
+
+            if ($point = $frame->getThirdPoint()) {
+                $bonus->addPoint($point);
+            }
+
+            return $bonus;
+        }, $this->bonusFrameStack);
+    }
+
+    public function setBonusFrame(FrameInterface $frame) : void
+    {
+        if (!$frame->isFullMark()) {
+            return;
+        }
+
+        $this->bonusFrameStack[] = $frame->createBonus();
+    }
+
+    private function deleteFrameStack() : void
+    {
+        $this->bonusFrameStack = array_filter($this->bonusFrameStack, function ($bonus) {
+            /** @var BonusInterface $bonus */
+            return !$bonus->isDie();
+        });
+    }
+
     private function createFrameStack(array $data) : self
     {
         foreach ($data as $score) {
 
-            $frame = $this->createFrame($score);
+            $frame = $this->frame->createFrame($score);
 
             $this->addBonusPoint($frame);
             $this->setBonusFrame($frame);
 
+            $this->deleteFrameStack();
 
             $this->frameStack[] = $frame;
         }
 
         return $this;
     }
-
-    private function createFrame($score) : FrameInterface
-    {
-        $frameClass = $this->frame;
-
-        $first = $score[0] ?? 0;
-        $second = $score[1] ?? 0;
-        $third = $score[2] ?? 0;
-
-        $frame = $frameClass::factory();
-        $frame->setPoint($first, $second, $third);
-
-        return $frame;
-    }
-
-    private function addBonusPoint(FrameInterface $frame) : void
-    {
-
-    }
-
-    private function setBonusFrame(FrameInterface $frame) : void
-    {
-        if (!$frame->isFullMark()) {
-            return;
-        }
-
-        $life = ($frame->isStrike()) ? 2 : 1;
-        $this->bonusFrameStack[] = new Bonus($life, $frame);
-    }
-
-
-//    public function setScore(int $first, int $second)
-//    {
-//        $frame = $this->current();
-//        $frame->setPoint($first, $second);
-//
-//        $this->bonusStack->bonusLogic($frame);
-//
-//        if ($this->isLastFrame()) {
-//            $this->addBonusGame($frame);
-//        }
-//
-//        $this->frameNumber++;
-//    }
-//
-//    public function isFinish() : bool
-//    {
-//        return isset($this->gameFrames[$this->frameNumber]);
-//    }
-//
-
-//
-//    private function addBonusGame(FrameInterface $frame) : self
-//    {
-//        if (!$frame->isFullMark()) {
-//            return $this;
-//        }
-//
-//        $frameClass = $this->frameClass;
-//
-//        $pitchCount = ($frame->isStrike()) ? 2 : 1;
-//
-//        $this->gameFrames = array_merge($this->gameFrames, $frameClass::factories($pitchCount));
-//
-//        return $this;
-//    }
-//
-//    private function current() : FrameInterface
-//    {
-//        return $this->gameFrames[$this->frameNumber];
-//    }
-//
-//    private function isLastFrame() : bool
-//    {
-//        return (
-//            $this->frameNumber === count($this->frames) - 1
-//        );
-//    }
 }

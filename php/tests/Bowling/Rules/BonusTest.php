@@ -1,6 +1,7 @@
 <?php
 
 use Bowling\Rules\Bonus;
+use Bowling\Rules\BonusInterface;
 use Bowling\Rules\Frame;
 use PHPUnit\Framework\TestCase;
 
@@ -11,10 +12,10 @@ class BonusTest extends TestCase
     {
         $bonus = new Bonus(2, new Frame());
 
-        $this->assertEquals($bonus->getFrame() instanceof Frame, true);
+        $this->assertEquals($bonus->addPoint(1) instanceof BonusInterface, true);
         $this->assertEquals($bonus->isDie(), false);
 
-        $this->assertEquals($bonus->getFrame() instanceof Frame, true);
+        $this->assertEquals($bonus->addPoint(1) instanceof BonusInterface, true);
         $this->assertEquals($bonus->isDie(), true);
     }
 
