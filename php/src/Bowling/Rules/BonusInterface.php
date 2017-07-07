@@ -1,8 +1,6 @@
 <?php
 
-namespace Bowling\Game\Frame\Bonus;
-
-use Bowling\Game\Frame\FrameInterface;
+namespace Bowling\Rules;
 
 interface BonusInterface
 {

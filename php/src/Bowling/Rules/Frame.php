@@ -1,6 +1,6 @@
 <?php
 
-namespace Bowling\Game\Frame;
+namespace Bowling\Rules;
 
 class Frame implements FrameInterface
 {
@@ -20,12 +20,28 @@ class Frame implements FrameInterface
     /**
      * @var int
      */
+    protected $third;
+
+    /**
+     * @var int
+     */
     protected $bonus;
 
     public function setPoint(int $first, int $second, int $third = 0) : FrameInterface
     {
+
+        if (
+            $first > static::POINT_LIMIT ||
+            $second > static::POINT_LIMIT ||
+            $third > static::POINT_LIMIT
+        ) {
+            throw new \Exception('Point is an illegal value');
+        }
+
+
         $this->first = $first;
         $this->second = $second;
+        $this->third = $third;
 
         return $this;
     }
@@ -41,9 +57,24 @@ class Frame implements FrameInterface
         return $this;
     }
 
+    public function getFirstPoint() : int
+    {
+        return $this->first;
+    }
+
+    public function getSecondPoint() : int
+    {
+        return $this->second;
+    }
+
+    public function getThirdPoint() : int
+    {
+        return $this->third;
+    }
+    
     public function getPoint() : int
     {
-        return $this->calculationScore();
+        return $this->first + $this->second + $this->third;
     }
 
     public function getTotalPoint() : int
@@ -66,31 +97,9 @@ class Frame implements FrameInterface
         return !$this->isStrike() && $this->getPoint() === static::POINT_LIMIT;
     }
 
-    public function getAddPoint() : int
+    public static function factory() : FrameInterface
     {
-        if (!$this->isFullMark()) {
-            return 0;
-        }
-
-        return $this->isStrike() ? $this->getPoint() : $this->first;
-    }
-
-    public static function factories(int $number) : array
-    {
-        return array_map(function () {
-            return new static;
-        }, range(0, $number - 1));
-    }
-
-    protected function calculationScore() : int
-    {
-        $point = $this->first + $this->second;
-
-        if ($point > static::POINT_LIMIT) {
-            throw new \Exception('Point is an illegal value');
-        }
-
-        return $point;
+        return new static;
     }
 
 }

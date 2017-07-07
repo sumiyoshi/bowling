@@ -1,10 +1,8 @@
 <?php
 
-namespace Bowling\Game\Frame\Bonus;
+namespace Bowling\Rules;
 
-use Bowling\Game\Frame\FrameInterface;
-
-class BonusFrameStack implements BonusFrameStackInterface
+class FrameStack implements FrameStackInterface
 {
     /**
      * @var BonusInterface[]

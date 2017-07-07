@@ -1,7 +1,7 @@
 <?php
 
-use Bowling\Game\Frame\Bonus\Bonus;
-use Bowling\Game\Frame\Frame;
+use Bowling\Rules\Bonus;
+use Bowling\Rules\Frame;
 use PHPUnit\Framework\TestCase;
 
 class BonusTest extends TestCase

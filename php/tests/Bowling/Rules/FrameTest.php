@@ -1,7 +1,7 @@
 <?php
 
-use Bowling\Game\Frame\Frame;
-use Bowling\Game\Frame\FrameInterface;
+use Bowling\Rules\Frame;
+use Bowling\Rules\FrameInterface;
 use PHPUnit\Framework\TestCase;
 
 class FrameTest extends TestCase
@@ -29,6 +29,17 @@ class FrameTest extends TestCase
         }
     }
 
+    public function test_各投球のポイント取得()
+    {
+        $frame = $this->newFrame();
+
+        $frame->setPoint(1, 2, 3);
+
+        $this->assertEquals($frame->getFirstPoint(), 1);
+        $this->assertEquals($frame->getSecondPoint(), 2);
+        $this->assertEquals($frame->getThirdPoint(), 3);
+    }
+
     public function test_点数取得()
     {
         $frame = $this->newFrame();
@@ -46,9 +57,11 @@ class FrameTest extends TestCase
         $frame->addBonus(10);
         $this->assertEquals($frame->getPoint(), 10);
 
+        $frame->setPoint(10, 10, 10);
+        $this->assertEquals($frame->getPoint(), 30);
+
         try {
-            $frame->setPoint(1, 10);
-            $this->assertEquals($frame->getPoint(), 10);
+            $frame->setPoint(1, 11);
 
             # ここは通らない
             $this->assertEquals(1, 0);
@@ -109,31 +122,10 @@ class FrameTest extends TestCase
         $this->assertEquals($frame->isSpare(), true);
     }
 
-    public function test_加算ポイント取得()
-    {
-        $frame = $this->newFrame();
-
-        $frame->setPoint(0, 0);
-        $this->assertEquals($frame->getAddPoint(), 0);
-
-        $frame->setPoint(5, 0);
-        $this->assertEquals($frame->getAddPoint(), 0);
-
-        $frame->setPoint(10, 0);
-        $this->assertEquals($frame->getAddPoint(), 10);
-
-        $frame->setPoint(4, 6);
-        $this->assertEquals($frame->getAddPoint(), 4);
-    }
-
     public function test_ファクトリー()
     {
-        $frames = Frame::factories(10);
-        $this->assertEquals(count($frames), 10);
-
-        foreach ($frames as $frame) {
-            $this->assertEquals($frame instanceof Frame, true);
-        }
+        $frame = Frame::factory();
+        $this->assertEquals($frame instanceof Frame, true);
     }
 
     private function newFrame()

@@ -2,100 +2,137 @@
 
 namespace Bowling;
 
-use Bowling\Game\Frame\Bonus\BonusFrameStack;
-use Bowling\Game\Frame\Bonus\BonusFrameStackInterface;
-use Bowling\Game\Frame\FrameInterface;
+
+use Bowling\Rules\Bonus;
+use Bowling\Rules\FrameInterface;
 
 class Game
 {
     /**
      * @var FrameInterface
      */
-    private $frameClass;
+    private $frame;
 
     /**
      * @var FrameInterface[]
      */
-    private $frames;
+    private $frameStack;
 
     /**
      * @var FrameInterface[]
      */
-    private $gameFrames;
+    private $bonusFrameStack;
 
-    /**
-     * @var int
-     */
-    private $frameNumber = 0;
-
-    /**
-     * @var BonusFrameStackInterface[]
-     */
-    private $bonusStack = [];
-
-
-    public function __construct(string $frameClass, int $pitchCount)
+    public function __construct(FrameInterface $frameClass)
     {
         /** @var FrameInterface $frameClass */
-        $this->frameClass = $frameClass;
-        $this->frames = $frameClass::factories($pitchCount);
-
-        $this->gameFrames = $this->frames;
-
-        $this->bonusStack = new BonusFrameStack;
-    }
-
-    public function setScore(int $first, int $second)
-    {
-        $frame = $this->current();
-        $frame->setPoint($first, $second);
-
-        $this->bonusStack->bonusLogic($frame);
-
-        if ($this->isLastFrame()) {
-            $this->addBonusGame($frame);
-        }
-
-        $this->frameNumber++;
-    }
-
-    public function isFinish() : bool
-    {
-        return isset($this->gameFrames[$this->frameNumber]);
+        $this->frame = $frameClass;
+//        $this->frames = $frameClass::factories($pitchCount);
+//
+//        $this->gameFrames = $this->frames;
+//
+//        $this->bonusStack = new BonusFrameStack;
     }
 
     public function getScore() : int
     {
-        return array_reduce($this->frames, function (int $score, FrameInterface $frame) {
+        return array_reduce($this->frameStack, function (int $score, FrameInterface $frame) {
             $score += $frame->getTotalPoint();
             return $score;
         }, 0);
     }
 
-    private function addBonusGame(FrameInterface $frame) : self
+    private function createFrameStack(array $data) : self
     {
-        if (!$frame->isFullMark()) {
-            return $this;
+        foreach ($data as $score) {
+
+            $frame = $this->createFrame($score);
+
+            $this->addBonusPoint($frame);
+            $this->setBonusFrame($frame);
+
+
+            $this->frameStack[] = $frame;
         }
-
-        $frameClass = $this->frameClass;
-
-        $pitchCount = ($frame->isStrike()) ? 2 : 1;
-
-        $this->gameFrames = array_merge($this->gameFrames, $frameClass::factories($pitchCount));
 
         return $this;
     }
 
-    private function current() : FrameInterface
+    private function createFrame($score) : FrameInterface
     {
-        return $this->gameFrames[$this->frameNumber];
+        $frameClass = $this->frame;
+
+        $first = $score[0] ?? 0;
+        $second = $score[1] ?? 0;
+        $third = $score[2] ?? 0;
+
+        $frame = $frameClass::factory();
+        $frame->setPoint($first, $second, $third);
+
+        return $frame;
     }
 
-    private function isLastFrame() : bool
+    private function addBonusPoint(FrameInterface $frame) : void
     {
-        return (
-            $this->frameNumber === count($this->frames) - 1
-        );
+
     }
+
+    private function setBonusFrame(FrameInterface $frame) : void
+    {
+        if (!$frame->isFullMark()) {
+            return;
+        }
+
+        $life = ($frame->isStrike()) ? 2 : 1;
+        $this->bonusFrameStack[] = new Bonus($life, $frame);
+    }
+
+
+//    public function setScore(int $first, int $second)
+//    {
+//        $frame = $this->current();
+//        $frame->setPoint($first, $second);
+//
+//        $this->bonusStack->bonusLogic($frame);
+//
+//        if ($this->isLastFrame()) {
+//            $this->addBonusGame($frame);
+//        }
+//
+//        $this->frameNumber++;
+//    }
+//
+//    public function isFinish() : bool
+//    {
+//        return isset($this->gameFrames[$this->frameNumber]);
+//    }
+//
+
+//
+//    private function addBonusGame(FrameInterface $frame) : self
+//    {
+//        if (!$frame->isFullMark()) {
+//            return $this;
+//        }
+//
+//        $frameClass = $this->frameClass;
+//
+//        $pitchCount = ($frame->isStrike()) ? 2 : 1;
+//
+//        $this->gameFrames = array_merge($this->gameFrames, $frameClass::factories($pitchCount));
+//
+//        return $this;
+//    }
+//
+//    private function current() : FrameInterface
+//    {
+//        return $this->gameFrames[$this->frameNumber];
+//    }
+//
+//    private function isLastFrame() : bool
+//    {
+//        return (
+//            $this->frameNumber === count($this->frames) - 1
+//        );
+//    }
 }

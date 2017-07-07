@@ -1,6 +1,6 @@
 <?php
 
-namespace Bowling\Game\Frame;
+namespace Bowling\Rules;
 
 interface FrameInterface
 {
@@ -8,9 +8,13 @@ interface FrameInterface
 
     public function addBonus(int $point) : FrameInterface;
 
-    public function getPoint() : int;
+    public function getFirstPoint() : int;
 
-    public function getAddPoint() : int;
+    public function getSecondPoint() : int;
+
+    public function getThirdPoint() : int;
+
+    public function getPoint() : int;
 
     public function getTotalPoint() : int;
 
@@ -20,5 +24,5 @@ interface FrameInterface
 
     public function isSpare() : bool;
 
-    public static function factories(int $number) : array;
+    public static function factory() : FrameInterface;
 }
