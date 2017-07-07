@@ -10,22 +10,32 @@ class Frame implements FrameInterface
     /**
      * @var int
      */
-    protected $first;
+    private $first;
 
     /**
      * @var int
      */
-    protected $second;
+    private $second;
 
     /**
      * @var int
      */
-    protected $third;
+    private $third;
 
     /**
      * @var int
      */
-    protected $bonus;
+    private $bonus;
+
+    /**
+     * @var
+     */
+    private $bonusName;
+
+    public function __construct(string $bonusName)
+    {
+        $this->bonusName = $bonusName;
+    }
 
     public function setPoint(int $first, int $second, int $third = 0) : FrameInterface
     {
@@ -102,7 +112,7 @@ class Frame implements FrameInterface
         $second = $score[1] ?? 0;
         $third = $score[2] ?? 0;
 
-        $frame = new self;
+        $frame = new self($this->bonusName);
         $frame->setPoint($first, $second, $third);
 
         return $frame;
@@ -110,7 +120,9 @@ class Frame implements FrameInterface
 
     public function createBonus() : BonusInterface
     {
+        $bonusClass = $this->bonusName;
+        
         $life = ($this->isStrike()) ? 2 : 1;
-        return new Bonus($life, $this);
+        return new $bonusClass($life, $this);
     }
 }

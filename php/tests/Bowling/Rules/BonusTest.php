@@ -10,7 +10,7 @@ class BonusTest extends TestCase
 
     public function test_フレーム取得とライフ()
     {
-        $bonus = new Bonus(2, new Frame());
+        $bonus = new Bonus(2, new Frame(Bonus::class));
 
         $this->assertEquals($bonus->addPoint(1) instanceof BonusInterface, true);
         $this->assertEquals($bonus->isDie(), false);

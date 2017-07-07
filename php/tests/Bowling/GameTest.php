@@ -97,7 +97,7 @@ class GameTest extends TestCase
     {
         return new Game(
             $data,
-            new Frame
+            new Frame(\Bowling\Rules\Bonus::class)
         );
     }
 }

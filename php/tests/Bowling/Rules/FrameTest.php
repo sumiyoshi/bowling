@@ -136,7 +136,7 @@ class FrameTest extends TestCase
 
     private function newFrame()
     {
-        return new Frame();
+        return new Frame(\Bowling\Rules\Bonus::class);
     }
 
 }
