@@ -9,9 +9,28 @@ defmodule Bowling.Frame do
   %Bowling.Frame{bonus: 10, first: 0, second: 0, third: 0}
   """
   @spec set_bonus(Frame.t, Integer.t) :: Frame.t
-  def set_bonus(%Bowling.Frame{} = frame, bonus) do
-    %{frame | bonus: bonus}
-  end
+  def set_bonus(%Bowling.Frame{} = frame, bonus), do: %{frame | bonus: frame.bonus + bonus}
+
+  @doc """
+
+  iex> Bowling.Frame.strike?(%Bowling.Frame{first: 10})
+  true
+
+  iex> Bowling.Frame.strike?(%Bowling.Frame{first: 9})
+  false
+  """
+  @spec strike?(Frame.t) :: Boolean.t
+  def strike?(%Bowling.Frame{} = frame), do: frame.first == 10
+
+  @doc """
+
+  iex> Bowling.Frame.spare?(%Bowling.Frame{first: 9, second: 1})
+  true
+
+  iex> Bowling.Frame.spare?(%Bowling.Frame{first: 9})
+  false
+  """
+  def spare?(%Bowling.Frame{} = frame), do: (frame.first + frame.second) == 10
 
   @doc """
 
