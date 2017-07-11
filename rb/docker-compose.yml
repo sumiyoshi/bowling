@@ -1,6 +1,0 @@
-ruby: &defaults
-  image: ruby:latest
-  working_dir: /app
-  volumes:
-    - .:/app
-  entrypoint: ["ruby"]
