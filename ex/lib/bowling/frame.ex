@@ -9,7 +9,12 @@ defmodule Bowling.Frame do
   %Bowling.Frame{bonus: 10, first: 0, second: 0, third: 0}
   """
   @spec set_bonus(Frame.t, Integer.t) :: Frame.t
-  def set_bonus(%Bowling.Frame{} = frame, bonus), do: %{frame | bonus: frame.bonus + bonus}
+  def set_bonus(%Bowling.Frame{} = frame, bonus) do
+    case frame.bonus + bonus <= 20 do
+      true -> %{frame | bonus: frame.bonus + bonus}
+       _ -> frame
+    end
+  end
 
   @doc """
 

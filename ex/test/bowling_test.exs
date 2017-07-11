@@ -3,7 +3,6 @@ defmodule BowlingTest do
   doctest Bowling
 
   test "all 1" do
-
     point = [
       {1,0},
       {1,0},
@@ -17,7 +16,7 @@ defmodule BowlingTest do
       {1,0,0}
     ]
 
-    assert Bowling.score(point) == 10
+    assert Bowling.score(point, Bowling.Frame) == 10
   end
 
   test "all 5" do
@@ -35,7 +34,7 @@ defmodule BowlingTest do
       {5,0,0}
     ]
 
-    assert Bowling.score(point) == 50
+    assert Bowling.score(point, Bowling.Frame) == 50
   end
 
   test "all spare" do
@@ -53,7 +52,7 @@ defmodule BowlingTest do
       {5,5,5}
     ]
 
-    assert Bowling.score(point) == 150
+    assert Bowling.score(point, Bowling.Frame) == 150
 
     point = [
       {5,5},
@@ -68,7 +67,7 @@ defmodule BowlingTest do
       {5,5,10}
     ]
 
-    assert Bowling.score(point) == 155
+    assert Bowling.score(point, Bowling.Frame) == 155
   end
 
   test "all strike" do
@@ -86,6 +85,6 @@ defmodule BowlingTest do
       {10,10,10}
     ]
 
-    assert Bowling.score(point) == 300
+    assert Bowling.score(point, Bowling.Frame) == 300
   end
 end
