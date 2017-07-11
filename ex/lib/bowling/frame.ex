@@ -30,6 +30,7 @@ defmodule Bowling.Frame do
   iex> Bowling.Frame.spare?(%Bowling.Frame{first: 9})
   false
   """
+  @spec spare?(Frame.t) :: Boolean.t
   def spare?(%Bowling.Frame{} = frame), do: (frame.first + frame.second) == 10
 
   @doc """
