@@ -1,7 +1,18 @@
-defmodule Bowling.Frame do
-  @moduledoc false
+defimpl Bowling.Score, for: Bowling.Frame do
 
-  defstruct first: 0, second: 0, third: 0, bonus: 0
+  def add_spare_bonus(frame, []), do: frame
+
+  def add_spare_bonus(frame, [h|_] = _frames) do
+    set_bonus(frame, h.first)
+  end
+
+  def add_strike_bonus(frame, []), do: frame
+
+  def add_strike_bonus(frame, [h|t] = _frames) do
+    set_bonus(frame, h.first)
+    |> set_bonus(h.second)
+    |> add_strike_bonus(t)
+  end
 
   @doc """
 
@@ -50,17 +61,5 @@ defmodule Bowling.Frame do
   def frame_point(%Bowling.Frame{} = frame, point) do
     point + frame.first + frame.second + frame.third + frame.bonus
   end
-
-  @doc """
-
-  iex> Bowling.Frame.cast_frame({1, 0})
-  %Bowling.Frame{bonus: 0, first: 1, second: 0, third: 0}
-
-  iex> Bowling.Frame.cast_frame({1, 2, 3})
-  %Bowling.Frame{bonus: 0, first: 1, second: 2, third: 3}
-  """
-  @spec cast_frame(Taple.t) :: Frame.t
-  def cast_frame({first, second, third}), do: %Bowling.Frame{first: first, second: second, third: third}
-  def cast_frame({first, second}), do: %Bowling.Frame{first: first, second: second}
-  def cast_frame(_), do: %Bowling.Frame{}
 end
+
