@@ -1,6 +1,5 @@
 defmodule BowlingTest do
   use ExUnit.Case
-  doctest Bowling
 
   test "all 1" do
     point = [

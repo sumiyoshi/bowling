@@ -5,14 +5,6 @@ defmodule Bowling.Frame do
 
   @type t :: %Bowling.Frame{first: Integer.t, second: Integer.t, third: Integer.t, bonus: Integer.t}
 
-  @doc """
-
-  iex> Bowling.Frame.cast_frame({1, 0})
-  %Bowling.Frame{bonus: 0, first: 1, second: 0, third: 0}
-
-  iex> Bowling.Frame.cast_frame({1, 2, 3})
-  %Bowling.Frame{bonus: 0, first: 1, second: 2, third: 3}
-  """
   @spec cast_frame(Taple.t) :: Frame.t
   def cast_frame({first, second, third}), do: %Bowling.Frame{first: first, second: second, third: third}
   def cast_frame({first, second}), do: %Bowling.Frame{first: first, second: second}
